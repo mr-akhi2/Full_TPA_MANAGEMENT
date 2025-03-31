@@ -23,12 +23,15 @@ function ClaimStatus() {
     const conf = confirm("Are you sure to delete your claim");
     if (conf) {
       try {
-        await fetch(`http://localhost:8080/deleteClaim/${email}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        await fetch(
+          `https://full-tpa-management.onrender.com/deleteClaim/${email}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
           .then((resp) => {
             return resp.json();
           })

@@ -50,12 +50,15 @@ export default function Navbar() {
     // console.log(email);
     if (window.confirm("Are you sure you want to delete your account?")) {
       try {
-        await fetch(`http://localhost:8080/deleteAccount/${email}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        await fetch(
+          `https://full-tpa-management.onrender.com/deleteAccount/${email}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
           .then((resp) => {
             return resp.json();
           })

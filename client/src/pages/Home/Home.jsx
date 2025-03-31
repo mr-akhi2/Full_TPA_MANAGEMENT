@@ -27,7 +27,7 @@ const Home = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/uploadfile/sendresponse",
+        "https://full-tpa-management.onrender.com/uploadfile/sendresponse",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
