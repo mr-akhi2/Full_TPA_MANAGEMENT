@@ -16,7 +16,7 @@ import Billing from "./billing";
 import Claim from "./Claim";
 import Client from "./Client";
 import Claimstatus from "./Claimstatus";
-import { Button } from "./ui/Button";
+import { Button } from "./ui/button";
 import { IoIosNotifications } from "react-icons/io";
 
 import DashBoard from "./DashBoard";

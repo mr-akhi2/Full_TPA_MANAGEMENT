@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "./ui/Button";
-import { Input } from "./ui/Input";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
