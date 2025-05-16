@@ -7,7 +7,7 @@ const fs = require("fs");
  * @param {object} placeholders - An object containing key-value pairs for placeholder replacements.
  * @returns {string} - The HTML string with placeholders replaced.
  */
-const parseTemplate = (templatePath, placeholders) => {
+const OTPparseTemplate = (templatePath, placeholders) => {
   // Read the template file
   let template = fs.readFileSync(templatePath, "utf8");
   // Replace placeholders dynamically
@@ -19,7 +19,7 @@ const parseTemplate = (templatePath, placeholders) => {
   return template;
 };
 
-module.exports = parseTemplate;
+module.exports = OTPparseTemplate;
 
 // // "build":"npm install && npm install --prefix client && npm run build --prefix client",
 // "start": "node backend/app.js"

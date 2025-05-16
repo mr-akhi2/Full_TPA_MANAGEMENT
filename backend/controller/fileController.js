@@ -2,6 +2,9 @@ const pdfParse = require("pdf-parse");
 const diseaseModel = require("../models/Disease"); // Renamed for clarity
 const user = require("../models/userModel");
 const disease_names = require("../models/disease_names");
+const OTPparseTemplate = require("../OTP/OTP");
+const path = require("path");
+const nodemailer = require("nodemailer");
 
 const fileHandler = async (req, res) => {
   const email = req.params.email;
@@ -54,7 +57,7 @@ const fileHandler = async (req, res) => {
         { disease_details: details._id },
         { new: true }
       );
-      //   console.log(User);
+      // console.log(User);
 
       return res.json({
         success: true,
@@ -72,11 +75,64 @@ const fileHandler = async (req, res) => {
       },
       { new: true }
     );
-    res.json({
-      success: true,
-      message: "pdf updated successfully",
-      details,
-    });
+    if (details) {
+      const User = await user.findOne({ email });
+      const date = new Date(Date.now()).toLocaleString();
+      const emailTemplate = await OTPparseTemplate(
+        path.join(__dirname, "../OTP/Report.html"),
+        {
+          name: User?.Client_details?.firstName,
+          email: User?.Client_details?.email,
+          visitedate: date,
+          Reference: User?.reference,
+        }
+      );
+      const transporter = await nodemailer.createTransport({
+        service: "gmail",
+        secure: true,
+        port: 465,
+        auth: {
+          user: "tpamanagement2024@gmail.com",
+          pass: "llce icse zgzd ppxh",
+        },
+      });
+      await transporter.sendMail(
+        {
+          from: "tpamanagement2024@gmail.com",
+          to: User?.Client_details?.email,
+          subject: "This email for logged in our websites",
+          html: emailTemplate,
+        },
+        (error, result) => {
+          if (error) {
+            res.status(500).json({
+              code: 500,
+              message: "Email Could not be sent",
+              messageID: "",
+              status: false,
+              error: error,
+              data: [],
+            });
+          } else {
+            console.log("send");
+            res.status(200).json({
+              code: 200,
+              OTP: OTP,
+              message: "Email is Send",
+              messageID: result.messageId,
+              status: true,
+              error: [],
+              data: [],
+            });
+          }
+        }
+      );
+      res.json({
+        success: true,
+        message: "pdf updated successfully",
+        details,
+      });
+    }
   } catch (error) {
     console.error("Error parsing PDF:", error);
     res.status(500).json({
@@ -189,7 +245,7 @@ const varified = async (req, res) => {
     console.error("Error in verification:", error);
     res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "Something is missing in your Document",
     });
   }
 };
@@ -245,94 +301,41 @@ const getAllNames = async (req, res) => {
   }
 };
 
-module.exports = { fileHandler, varified, getAllNames };
+// This is for sending the refrence and their status
 
-// const varified = async (req, res) => {
-//   try {
-//     const email = req.params.email;
-//     const userRecord = await user
-//       .findOne({ email })
-//       .populate("disease_details", "-description");
+const reference = async (req, res) => {
+  const { email, reference } = req.body;
+  const User = await user.findOne({ email }).populate("disease_details");
+  if (!User) {
+    return res.status(401).json({
+      success: false,
+      message: "invalid email or reference no",
+    });
+  }
+  if (User) {
+    if (reference == User.reference) {
+      const data = {
+        name: User.name,
+        reference: reference,
+        email: User.email,
+        Claim_details: User?.Claim_details?.status,
+        Claim_Ammount: User?.Claim_details?.claimAmount,
+        Client_details: User?.Client_details?.status,
+        ReportStatus: User?.disease_details?.Status,
+        issues: User?.disease_details?.issues,
+      };
+      res.status(201).json({
+        success: true,
+        message: "successfully track",
+        data,
+      });
+    } else {
+      res.status(401).json({
+        success: false,
+        message: "Invalid refrence",
+      });
+    }
+  }
+};
 
-//     if (!userRecord) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "User not found",
-//       });
-//     }
-
-//     const { Claim_details, Client_details } = userRecord;
-//     if (!Claim_details || !Client_details) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "User details are incomplete",
-//       });
-//     }
-
-//     const fullName = `${Client_details.firstName}${Client_details.lastName}`;
-//     const claimantName = Claim_details.name.replace(/\s+/g, ""); // Remove spaces
-
-//     let diseaseDetails = await diseaseModel.findOne({ email });
-//     if (!diseaseDetails) {
-//       diseaseDetails = new diseaseModel({ email, issues: [] });
-//     }
-
-//     let hasIssues = false;
-//     let issuesToAdd = [];
-
-//     if (Claim_details.status) {
-//       if (fullName !== claimantName) {
-//         issuesToAdd.push("Name does not match");
-//       }
-//       if (Claim_details.ifscCode !== Client_details.ifscCode) {
-//         issuesToAdd.push("IFSC code does not match");
-//       }
-//       if (Claim_details.bankName !== Client_details.bankName) {
-//         issuesToAdd.push("Bank name does not match");
-//       }
-//       if (Claim_details.claimAmount !== diseaseDetails?.billAmmount) {
-//         issuesToAdd.push("Claim amount does not match");
-//       }
-
-//       if (issuesToAdd.length > 0) {
-//         diseaseDetails.issues = [
-//           ...new Set([...diseaseDetails.issues, ...issuesToAdd]),
-//         ]; // Prevent duplicate issues
-//         await diseaseDetails.save();
-
-//         await diseaseModel.findOneAndUpdate(
-//           { email },
-//           { Status: false },
-//           { new: true }
-//         );
-
-//         return res.status(400).json({
-//           success: false,
-//           message: "Some document details do not match",
-//           issues: issuesToAdd,
-//         });
-//       } else {
-//         await diseaseModel.findOneAndUpdate(
-//           { email },
-//           { Status: true },
-//           { new: true }
-//         );
-//         return res.status(200).json({
-//           success: true,
-//           message: "Document verified successfully",
-//         });
-//       }
-//     } else {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Please verify the document first",
-//       });
-//     }
-//   } catch (error) {
-//     console.error("Error in verification:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "Server error",
-//     });
-//   }
-// };
+module.exports = { fileHandler, varified, getAllNames, reference };

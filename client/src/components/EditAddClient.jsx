@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { UserContext } from "../pages/context/UserContext";
 
-function AddClient() {
+function EditAddClient() {
   const { userData } = useContext(UserContext);
   // console.log(userData);
   const initial = {
@@ -47,7 +47,7 @@ function AddClient() {
         if (data.success) {
           toast.success(data.message);
           setFormData(initial);
-          window.location.replace("/addclient");
+          window.location.reload();
         } else {
           toast.error(data.message);
         }
@@ -63,27 +63,6 @@ function AddClient() {
       setUserEmail(email);
     }
   }, []);
-
-  if (userData?.data?.Client_details?.firstName) {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        <p className="text-center text-2xl font-semibold text-blue-500 mt-4">
-          Already Client Added
-        </p>
-        <div className=" flex gap-10">
-          <Link to="/claimstatus" className="underline  text-2xl mt-5">
-            view
-          </Link>
-          <Link
-            to="/editclient"
-            className="underline mt-5 text-2xl text-blue-700"
-          >
-            Edit
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto px-4 mt-6 max-w-4xl">
@@ -157,4 +136,4 @@ function AddClient() {
   );
 }
 
-export default AddClient;
+export default EditAddClient;

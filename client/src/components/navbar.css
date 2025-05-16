@@ -1,0 +1,6 @@
+#cross {
+  user-select: none;
+  &:hover {
+    cursor: default;
+  }
+}

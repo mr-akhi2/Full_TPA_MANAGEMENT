@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node backend/app.js",
-    "build":"npm install && npm install --prefix client && npm run build --prefix client",
-    "start": "node backend/app.js"
+    "dev": "node app.js"
 
   },
   "keywords": [],

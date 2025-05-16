@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import logo from "../../src/pages/images/logo.jpg";
 
 const Login = ({ setisloggedin }) => {
   const navigate = useNavigate();
@@ -36,16 +37,13 @@ const Login = ({ setisloggedin }) => {
       window.location.replace("/");
     } else {
       try {
-        const res = await fetch(
-          "https://full-tpa-management.onrender.com/login",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userdata),
-          }
-        )
+        const res = await fetch("http://localhost:8080/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userdata),
+        })
           .then((resp) => {
             return resp.json();
           })
@@ -69,8 +67,11 @@ const Login = ({ setisloggedin }) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex flex-col justify-center items-center h-screen">
       <div className="border-2 rounded-2xl p-5 w-[70%] md:w-[40%] lg:w-[25%]">
+        <div className="flex justify-center">
+          <img src={logo} className="h-15 w-15 rounded-full" />
+        </div>
         <div className="p-5">
           <h1 className="text-center font-bold text-2xl">Login</h1>
         </div>

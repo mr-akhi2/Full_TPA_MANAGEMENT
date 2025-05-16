@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import logo from "../pages/images/logo.jpg";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const Signup = () => {
   const sendOTP = async () => {
     setloader(true);
     try {
-      await fetch("https://full-tpa-management.onrender.com/send", {
+      await fetch("http://localhost:8080/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +66,7 @@ const Signup = () => {
     setVarify(true);
     try {
       if (resposnseOTP === parseInt(userOTP)) {
-        await fetch("https://full-tpa-management.onrender.com/user", {
+        await fetch("http://localhost:8080/user", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -93,9 +94,12 @@ const Signup = () => {
     }
   };
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex flex-col justify-center items-center h-screen">
       <div className="border-2 rounded-2xl p-5 w-[70%] md:w-[40%] lg:w-[25%]">
         <div className="p-5">
+          <div className="flex justify-center">
+            <img src={logo} className="h-15 w-15 rounded-full" />
+          </div>
           <h1 className="text-center font-bold text-2xl">
             Crete a new account
           </h1>

@@ -5,6 +5,8 @@ const user = new mongoose.Schema(
     name: String,
     email: String,
     password: String,
+    reference: String,
+
     Claim_details: {
       name: String,
       cardId: String,
@@ -39,6 +41,9 @@ const user = new mongoose.Schema(
       branchName: String,
       Accoutno: String,
       ifscCode: String,
+      status: {
+        type: Boolean,
+      },
     },
     disease_details: {
       type: mongoose.Schema.Types.ObjectId,

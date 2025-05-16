@@ -44,7 +44,7 @@ const Request = () => {
     }, 50);
     const email = await userData?.data?.email;
     const resp = await fetch(
-      `https://full-tpa-management.onrender.com/uploadFile/varify/${email}`,
+      `http://localhost:8080/uploadFile/varify/${email}`,
       {
         method: "POST",
       }
@@ -53,17 +53,23 @@ const Request = () => {
         return res.json();
       })
       .then((respData) => {
-        // console.log(respData);
+        console.log(respData);
         if (respData.success) {
           setTimeout(() => {
             toast.success(respData.message);
-            window.location.reload();
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
           }, 5000);
+        } else {
+          setTimeout(() => {
+            toast.error(respData.message);
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          }, 4000);
         }
-        setTimeout(() => {
-          toast.error(respData.message);
-          window.location.reload();
-        }, 4000);
       });
   };
 

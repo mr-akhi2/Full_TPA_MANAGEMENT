@@ -3,8 +3,11 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import LoderImg from "../pages/images/loder.gif";
 
 const Userinfo = () => {
+  const [loder, setLoder] = useState(true);
+
   const [user, setUser] = useState([]); // Ensures array structure
   const [input, setInput] = useState({ notification: "" });
 
@@ -21,7 +24,7 @@ const Userinfo = () => {
 
     try {
       const res = await fetch(
-        `https://full-tpa-management.onrender.com/sendresponse/${data.email}`,
+        `http://localhost:8080/sendresponse/${data.email}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -46,17 +49,15 @@ const Userinfo = () => {
 
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          "https://full-tpa-management.onrender.com/get",
-          {
-            signal: controller.signal,
-          }
-        );
+        const res = await fetch("http://localhost:8080/get", {
+          signal: controller.signal,
+        });
 
         if (!res.ok) throw new Error("Failed to fetch data");
 
         const data = await res.json();
         setUser(Array.isArray(data.data) ? data.data : []);
+        setLoder(false);
       } catch (error) {
         if (error.name !== "AbortError") {
           toast.info("No Record  Found");
@@ -69,14 +70,24 @@ const Userinfo = () => {
     return () => controller.abort();
   }, []);
 
-  if (user.length === 0) {
+  if (!user || user.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen text-center">
-        <p className="text-2xl font-semibold text-red-500">No Record Found</p>
-        <Link to="/" className="underline text-blue-600 mt-5">
-          Go To Home
-        </Link>
-      </div>
+      <>
+        {loder ? (
+          <div className="flex justify-center items-center h-screen">
+            <img src={LoderImg} className="h-20 w-20" />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-center text-2xl font-semibold text-red-500 mt-4">
+              No Record Found
+            </p>
+            <Link to="/" className="underline mt-5">
+              Go To Home
+            </Link>
+          </div>
+        )}
+      </>
     );
   }
 

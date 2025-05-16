@@ -57,9 +57,7 @@ const Report = () => {
   }
 
   useEffect(() => {
-    const res = fetch(
-      "https://full-tpa-management.onrender.com/uploadFile/getallname"
-    )
+    const res = fetch("http://localhost:8080/uploadFile/getallname")
       .then((resp) => {
         return resp.json();
       })
@@ -134,6 +132,7 @@ const Report = () => {
             return (
               <option value={item.disease_name} key={index}>
                 {item.disease_name}
+                {item.price}
               </option>
             );
           })}

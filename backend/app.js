@@ -3,11 +3,13 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const parseTemplate = require("./main");
+const OTPparseTemplate = require("./OTP/OTP");
 const path = require("path");
 const user = require("./models/userModel");
 // this is for the pdf dependencies
 const fileupload = require("express-fileupload");
 const userRouter = require("./router/fileRouter");
+const diseaseModel = require("./models/Disease");
 
 const app = express();
 const PORT = 8080;
@@ -104,6 +106,14 @@ app.post("/send", async (req, res) => {
 app.post("/user", async (req, res) => {
   // console.log(req.body);
   const { name, email, password } = req.body;
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const nums = "1234567890";
+  const allChars = chars + nums;
+  let reference = "";
+  for (let i = 0; i < 8; i++) {
+    reference += allChars.charAt(Math.floor(Math.random() * allChars.length));
+  }
+
   const userExist = await user.findOne({ email: email });
   try {
     if (userExist) {
@@ -113,7 +123,7 @@ app.post("/user", async (req, res) => {
       });
     }
 
-    const newUser = await new user({ name, email, password });
+    const newUser = await new user({ name, email, password, reference });
 
     newUser.save();
     return res.status(201).json({
@@ -255,21 +265,77 @@ app.post("/client/:email", async (req, res) => {
       panCardNo: req.body.panCardNo,
       bankName: req.body.bankName,
       branchName: req.body.branchName,
-      Accoutno: req.body.accountNo, // Fixed typo
+      Accoutno: req.body.accountNo,
       ifscCode: req.body.ifscCode,
+      status: true,
     };
 
     // Update user data
-    await user.findByIdAndUpdate(
+    let updatedUser = await user.findByIdAndUpdate(
       User._id,
-      { Client_details: client_data }, // Correct way to update nested object
+      { Client_details: client_data },
       { new: true }
     );
 
-    return res.status(200).json({
-      success: true,
-      message: "User updated successfully",
-    });
+    // send otp
+
+    // return
+    if (updatedUser) {
+      const date = new Date(Date.now()).toLocaleString();
+      const emailTemplate = await OTPparseTemplate(
+        path.join(__dirname, "./OTP/client.html"),
+        {
+          name: client_data.firstName,
+          email: client_data.email,
+          visitedate: date,
+          reference: updatedUser.reference,
+        }
+      );
+      const transporter = await nodemailer.createTransport({
+        service: "gmail",
+        secure: true,
+        port: 465,
+        auth: {
+          user: "tpamanagement2024@gmail.com",
+          pass: "llce icse zgzd ppxh",
+        },
+      });
+      await transporter.sendMail(
+        {
+          from: "tpamanagement2024@gmail.com",
+          to: client_data.email,
+          subject: "This email for logged in our websites",
+          html: emailTemplate,
+        },
+        (error, result) => {
+          if (error) {
+            res.status(500).json({
+              code: 500,
+              message: "Email Could not be sent",
+              messageID: "",
+              status: false,
+              error: error,
+              data: [],
+            });
+          } else {
+            console.log("send");
+            res.status(200).json({
+              code: 200,
+              OTP: OTP,
+              message: "Email is Send",
+              messageID: result.messageId,
+              status: true,
+              error: [],
+              data: [],
+            });
+          }
+        }
+      );
+      return res.status(200).json({
+        success: true,
+        message: "User updated successfully",
+      });
+    }
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -323,17 +389,69 @@ app.post("/claim/:email", async (req, res) => {
       address: req.body.address,
       bankAccountNumber: req.body.bankAccountNumber,
       ifscCode: req.body.ifscCode,
+      status: true,
     };
-    await user.findByIdAndUpdate(
+    const updatedUser = await user.findByIdAndUpdate(
       User._id,
       { Claim_details: claim_data },
       { new: true }
     );
-
-    return res.status(200).json({
-      success: true,
-      message: "Claimed successfully",
-    });
+    if (updatedUser) {
+      const date = new Date(Date.now()).toLocaleString();
+      const emailTemplate = await OTPparseTemplate(
+        path.join(__dirname, "./OTP/Claim.html"),
+        {
+          name: claim_data.name,
+          email: User?.Client_details?.email,
+          visitedate: date,
+          reference: updatedUser.reference,
+        }
+      );
+      const transporter = await nodemailer.createTransport({
+        service: "gmail",
+        secure: true,
+        port: 465,
+        auth: {
+          user: "tpamanagement2024@gmail.com",
+          pass: "llce icse zgzd ppxh",
+        },
+      });
+      await transporter.sendMail(
+        {
+          from: "tpamanagement2024@gmail.com",
+          to: User?.Client_details?.email,
+          subject: "This email for logged in our websites",
+          html: emailTemplate,
+        },
+        (error, result) => {
+          if (error) {
+            res.status(500).json({
+              code: 500,
+              message: "Email Could not be sent",
+              messageID: "",
+              status: false,
+              error: error,
+              data: [],
+            });
+          } else {
+            console.log("send");
+            res.status(200).json({
+              code: 200,
+              OTP: OTP,
+              message: "Email is Send",
+              messageID: result.messageId,
+              status: true,
+              error: [],
+              data: [],
+            });
+          }
+        }
+      );
+      return res.status(200).json({
+        success: true,
+        message: "Claimed successfully",
+      });
+    }
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -436,6 +554,11 @@ app.post("/sendresponse/:email", async (req, res) => {
         },
         { new: true }
       );
+      const diseaseUser = await await diseaseModel.findOneAndUpdate(
+        { email },
+        { Status: false },
+        { new: true }
+      );
       return res.status(201).json({
         success: true,
         message: "user updated",
@@ -456,12 +579,12 @@ app.post("/sendresponse/:email", async (req, res) => {
 
 // this is for the takin the pdf details
 
-const __dirnam = path.resolve();
-app.use(express.static(path.join()));
-app.use(express.static(path.join(__dirnam, "/client/dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirnam, "client", "dist", "index.html"));
-});
+// const __dirnam = path.resolve();
+// app.use(express.static(path.join()));
+// app.use(express.static(path.join(__dirnam, "/client/dist")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirnam, "client", "dist", "index.html"));
+// });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

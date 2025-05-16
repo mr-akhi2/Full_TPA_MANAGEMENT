@@ -9,7 +9,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const token = window.localStorage.getItem("tocken");
     if (token) {
-      fetch("https://full-tpa-management.onrender.com/findUser", {
+      fetch("http://localhost:8080/findUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
