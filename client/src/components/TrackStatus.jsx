@@ -17,13 +17,16 @@ const TrackStatus = () => {
   const fetchStatus = async () => {
     setloader(true);
     try {
-      await fetch("http://localhost:8080/uploadFile/reference", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
+      await fetch(
+        "https://full-tpa-management.onrender.com/uploadFile/reference",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      )
         .then((resp) => {
           return resp.json();
         })

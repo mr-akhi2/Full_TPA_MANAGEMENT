@@ -24,11 +24,14 @@ const DashBoard = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:8080/sendresponse/${email}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ input, status }),
-      });
+      const res = await fetch(
+        `https://full-tpa-management.onrender.com/sendresponse/${email}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ input, status }),
+        }
+      );
 
       const responseData = await res.json();
       if (responseData.success) {
@@ -49,9 +52,12 @@ const DashBoard = () => {
 
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:8080/get", {
-          signal: controller.signal,
-        });
+        const res = await fetch(
+          "https://full-tpa-management.onrender.com/get",
+          {
+            signal: controller.signal,
+          }
+        );
 
         if (!res.ok) throw new Error("Failed to fetch data");
 

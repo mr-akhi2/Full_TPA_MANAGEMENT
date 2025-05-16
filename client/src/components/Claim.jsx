@@ -32,13 +32,16 @@ const Claim = () => {
     // console.log(userData?.data?.Client_details.firstName);
     if (userData?.data?.Client_details?.firstName) {
       try {
-        await fetch(`http://localhost:8080/claim/${userEmail}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        })
+        await fetch(
+          `https://full-tpa-management.onrender.com/claim/${userEmail}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        )
           .then((resp) => {
             return resp.json();
           })

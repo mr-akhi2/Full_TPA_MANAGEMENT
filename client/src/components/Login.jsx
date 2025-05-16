@@ -37,13 +37,16 @@ const Login = ({ setisloggedin }) => {
       window.location.replace("/");
     } else {
       try {
-        const res = await fetch("http://localhost:8080/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userdata),
-        })
+        const res = await fetch(
+          "https://full-tpa-management.onrender.com/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userdata),
+          }
+        )
           .then((resp) => {
             return resp.json();
           })

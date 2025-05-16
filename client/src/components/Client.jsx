@@ -24,7 +24,7 @@ const Userinfo = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/sendresponse/${data.email}`,
+        `https://full-tpa-management.onrender.com/sendresponse/${data.email}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -49,9 +49,12 @@ const Userinfo = () => {
 
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:8080/get", {
-          signal: controller.signal,
-        });
+        const res = await fetch(
+          "https://full-tpa-management.onrender.com/get",
+          {
+            signal: controller.signal,
+          }
+        );
 
         if (!res.ok) throw new Error("Failed to fetch data");
 

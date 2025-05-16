@@ -35,13 +35,18 @@ function EditAddClient() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`http://localhost:8080/client/${encodeURIComponent(useremail)}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
+    fetch(
+      `https://full-tpa-management.onrender.com/client/${encodeURIComponent(
+        useremail
+      )}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {

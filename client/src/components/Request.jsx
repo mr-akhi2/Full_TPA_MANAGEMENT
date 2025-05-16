@@ -44,7 +44,7 @@ const Request = () => {
     }, 50);
     const email = await userData?.data?.email;
     const resp = await fetch(
-      `http://localhost:8080/uploadFile/varify/${email}`,
+      `https://full-tpa-management.onrender.com/uploadFile/varify/${email}`,
       {
         method: "POST",
       }
