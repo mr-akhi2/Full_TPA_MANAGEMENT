@@ -50,6 +50,7 @@ const fileHandler = async (req, res) => {
         disease_name: extractedDiseaseName,
         billAmmount: billAmount,
         discription: description,
+        status: true,
       });
 
       const User = await user.findOneAndUpdate(
@@ -57,7 +58,7 @@ const fileHandler = async (req, res) => {
         { disease_details: details._id },
         { new: true }
       );
-      // console.log(User);
+      console.log(User);
 
       return res.json({
         success: true,
@@ -72,6 +73,7 @@ const fileHandler = async (req, res) => {
         disease_name: extractedDiseaseName,
         billAmmount: billAmount,
         discription: description,
+        status: true,
       },
       { new: true }
     );
@@ -305,22 +307,24 @@ const getAllNames = async (req, res) => {
 
 const reference = async (req, res) => {
   const { email, reference } = req.body;
-  const User = await user.findOne({ email }).populate("disease_details");
+  const User = await user.findOne({ reference }).populate("disease_details");
   if (!User) {
     return res.status(401).json({
       success: false,
-      message: "invalid email or reference no",
+      message: "invalid name or reference No",
     });
   }
   if (User) {
-    if (reference == User.reference) {
+    if (email == User?.Client_details?.email) {
       const data = {
-        name: User.name,
+        name: User?.Claim_details?.name,
         reference: reference,
-        email: User.email,
+        email: User?.Client_details?.email,
         Claim_details: User?.Claim_details?.status,
         Claim_Ammount: User?.Claim_details?.claimAmount,
         Client_details: User?.Client_details?.status,
+        uploadStatus: User?.disease_details?.status,
+        addClaimStatus: User?.Claim_details?.addClaimStatus,
         ReportStatus: User?.disease_details?.Status,
         issues: User?.disease_details?.issues,
       };
@@ -332,7 +336,7 @@ const reference = async (req, res) => {
     } else {
       res.status(401).json({
         success: false,
-        message: "Invalid refrence",
+        message: "Invalid refrence or email",
       });
     }
   }

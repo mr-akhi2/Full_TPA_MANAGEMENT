@@ -5,6 +5,7 @@ let diseaseModel = new mongoose.Schema({
   disease_name: String,
   billAmmount: String,
   discription: String,
+  status: Boolean,
   Status: Boolean,
   issues: [{ type: String }],
 });

@@ -21,6 +21,7 @@ const user = new mongoose.Schema(
       ifscCode: String,
       comments: String,
       notification: String,
+      addClaimStatus: Boolean,
       status: {
         type: Boolean,
       },

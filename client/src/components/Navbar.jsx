@@ -108,12 +108,20 @@ export default function Navbar() {
               />
             </Link>
             {!isloggedin && (
-              <div className="flex items-center justify-around">
-                <p className="text-sm md:text-2xl">Third Party Administrator</p>
-                <Link to="/doctor" className="text-sm mt-2 ms-2 text-blue-700">
+              <div className="flex items-center justify-around gap-6 me-1">
+                <p className="text-2xl md:text-3xl">
+                  Third Party Administrator
+                </p>
+                <Link
+                  to="/doctor"
+                  className="text-md md:text-2xl mt-2 ms-2 font-semibold"
+                >
                   Upload
                 </Link>
-                <Link to="/track" className="text-sm text-blue-700 mt-2 ms-2">
+                <Link
+                  to="/track"
+                  className="text-md font-semibold md:text-2xl mt-2 ms-2"
+                >
                   Track status
                 </Link>
               </div>

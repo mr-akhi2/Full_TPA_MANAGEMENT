@@ -389,7 +389,7 @@ app.post("/claim/:email", async (req, res) => {
       address: req.body.address,
       bankAccountNumber: req.body.bankAccountNumber,
       ifscCode: req.body.ifscCode,
-      status: true,
+      addClaimStatus: true,
     };
     const updatedUser = await user.findByIdAndUpdate(
       User._id,
@@ -579,12 +579,12 @@ app.post("/sendresponse/:email", async (req, res) => {
 
 // this is for the takin the pdf details
 
-// const __dirnam = path.resolve();
-// app.use(express.static(path.join()));
-// app.use(express.static(path.join(__dirnam, "/client/dist")));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.resolve(__dirnam, "client", "dist", "index.html"));
-// });
+const __dirnam = path.resolve();
+app.use(express.static(path.join()));
+app.use(express.static(path.join(__dirnam, "/client/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirnam, "client", "dist", "index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
