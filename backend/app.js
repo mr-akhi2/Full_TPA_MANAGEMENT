@@ -15,7 +15,16 @@ const app = express();
 const PORT = 8080;
 
 app.use(fileupload());
-app.use(cors({ origin: "*" }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:8080",
+      "http://localhost:5173",
+      "https://full-tpa-management.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // router
