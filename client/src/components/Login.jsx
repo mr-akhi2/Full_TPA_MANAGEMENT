@@ -38,7 +38,7 @@ const Login = ({ setisloggedin }) => {
     } else {
       try {
         const res = await fetch(
-          "https://full-tpa-management.onrender.com/login",
+          `${import.meta.env.VITE_FRONTEND_URL}/login`,
           {
             method: "POST",
             headers: {

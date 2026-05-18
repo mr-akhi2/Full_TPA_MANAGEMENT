@@ -30,7 +30,7 @@ const Upload = () => {
 
     try {
       const response = await fetch(
-        `https://full-tpa-management.onrender.com/uploadFile/file/${email}`,
+        `${import.meta.env.VITE_FRONTEND_URL}/uploadFile/file/${email}`,
         {
           method: "POST",
           body: formData,

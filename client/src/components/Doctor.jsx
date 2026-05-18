@@ -21,7 +21,7 @@ const Doctor = () => {
     setloader(true);
     try {
       await fetch(
-        "https://full-tpa-management.onrender.com/uploadFile/reference",
+        `${import.meta.env.VITE_FRONTEND_URL}/uploadFile/reference`,
         {
           method: "POST",
           headers: {
@@ -74,7 +74,7 @@ const Doctor = () => {
 
     try {
       const response = await fetch(
-        `https://full-tpa-management.onrender.com/uploadFile/file/${email}`,
+        `${import.meta.env.VITE_FRONTEND_URL}/uploadFile/file/${email}`,
         {
           method: "POST",
           body: formData,

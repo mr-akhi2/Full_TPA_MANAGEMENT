@@ -55,7 +55,7 @@ export default function Navbar() {
     if (window.confirm("Are you sure you want to delete your account?")) {
       try {
         await fetch(
-          `https://full-tpa-management.onrender.com/deleteAccount/${email}`,
+          `${import.meta.env.VITE_FRONTEND_URL}/deleteAccount/${email}`,
           {
             method: "DELETE",
             headers: {

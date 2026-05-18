@@ -28,7 +28,7 @@ app.use("/uploadFile", userRouter);
 // find disease_name
 
 app.post("/send", async (req, res) => {
-  // console.log(req.body);
+  console.log(req.body);
 
   const { name, email } = req.body;
   if (!name || !email) {

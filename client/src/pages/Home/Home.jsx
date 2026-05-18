@@ -32,7 +32,7 @@ const Home = () => {
 
     try {
       const response = await fetch(
-        "https://full-tpa-management.onrender.com/uploadfile/sendresponse",
+        `${import.meta.env.VITE_FRONTEND_URL}/uploadfile/sendresponse`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

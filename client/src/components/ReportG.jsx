@@ -58,7 +58,7 @@ const Report = () => {
 
   useEffect(() => {
     const res = fetch(
-      "https://full-tpa-management.onrender.com/uploadFile/getallname"
+      `${import.meta.env.VITE_FRONTEND_URL}/uploadFile/getallname`
     )
       .then((resp) => {
         return resp.json();

@@ -24,7 +24,7 @@ const Userinfo = () => {
 
     try {
       const res = await fetch(
-        `https://full-tpa-management.onrender.com/sendresponse/${data.email}`,
+        `${import.meta.env.VITE_FRONTEND_URL}/sendresponse/${data.email}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -50,7 +50,7 @@ const Userinfo = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "https://full-tpa-management.onrender.com/get",
+          `${import.meta.env.VITE_FRONTEND_URL}/get`,
           {
             signal: controller.signal,
           }

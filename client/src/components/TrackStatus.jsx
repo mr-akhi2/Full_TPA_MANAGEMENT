@@ -19,7 +19,7 @@ const TrackStatus = () => {
     setloader(true);
     try {
       await fetch(
-        "https://full-tpa-management.onrender.com/uploadFile/reference",
+        `${import.meta.env.VITE_FRONTEND_URL}/uploadFile/reference`,
         {
           method: "POST",
           headers: {

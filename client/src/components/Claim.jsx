@@ -33,7 +33,7 @@ const Claim = () => {
     if (userData?.data?.Client_details?.firstName) {
       try {
         await fetch(
-          `https://full-tpa-management.onrender.com/claim/${userEmail}`,
+          `${import.meta.env.VITE_FRONTEND_URL}/claim/${userEmail}`,
           {
             method: "POST",
             headers: {

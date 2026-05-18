@@ -31,7 +31,7 @@ const Signup = () => {
   const sendOTP = async () => {
     setloader(true);
     try {
-      await fetch("https://full-tpa-management.onrender.com/send", {
+      await fetch(`${import.meta.env.VITE_FRONTEND_URL}/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const Signup = () => {
     setVarify(true);
     try {
       if (resposnseOTP === parseInt(userOTP)) {
-        await fetch("https://full-tpa-management.onrender.com/user", {
+        await fetch(`${import.meta.env.VITE_FRONTEND_URL}/user`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

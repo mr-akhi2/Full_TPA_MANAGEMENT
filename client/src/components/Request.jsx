@@ -44,7 +44,7 @@ const Request = () => {
     }, 50);
     const email = await userData?.data?.email;
     const resp = await fetch(
-      `https://full-tpa-management.onrender.com/uploadFile/varify/${email}`,
+      `${import.meta.env.VITE_FRONTEND_URL}/uploadFile/varify/${email}`,
       {
         method: "POST",
       }

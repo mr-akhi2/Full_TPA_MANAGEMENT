@@ -24,7 +24,7 @@ function ClaimStatus() {
     if (conf) {
       try {
         await fetch(
-          `https://full-tpa-management.onrender.com/deleteClaim/${email}`,
+          `${import.meta.env.VITE_FRONTEND_URL}/deleteClaim/${email}`,
           {
             method: "DELETE",
             headers: {

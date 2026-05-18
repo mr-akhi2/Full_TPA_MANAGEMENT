@@ -36,7 +36,7 @@ function AddClient() {
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch(
-      `https://full-tpa-management.onrender.com/client/${encodeURIComponent(
+      `${import.meta.env.VITE_FRONTEND_URL}/client/${encodeURIComponent(
         useremail
       )}`,
       {
