@@ -17,14 +17,12 @@ const PORT = 8080;
 app.use(fileupload());
 app.use(
   cors({
-    origin: [
-      "http://localhost:8080",
-      "http://localhost:5173",
-      "https://full-tpa-management.vercel.app",
-    ],
+    origin: true,
     credentials: true,
   })
 );
+
+app.options("*", cors());
 app.use(express.json());
 
 // router
@@ -37,7 +35,7 @@ app.use("/uploadFile", userRouter);
 // find disease_name
 
 app.post("/send", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   const { name, email } = req.body;
   if (!name || !email) {
